@@ -5,4 +5,6 @@
 	4. php artisan tinker
 	5. $users = new \App\Models\User();
 	6. $users->factory(20)->create();
-	7. exit
+	7. $cuisines = new \App\Models\Cuisine();
+	8. $cuisines->factory(30)->create();
+	9. exit

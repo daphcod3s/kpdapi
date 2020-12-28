@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\CuisineController;
+use App\Http\Controllers\Api\CuisineController;
 
 Route::group(['prefix' => 'auth'], function(){
 	Route::post('login', [AuthController::class, 'login']);
