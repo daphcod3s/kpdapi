@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Restaurant;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\User as UserResource;
 
-class Cuisine extends JsonResource
+class Restaurant extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,6 +18,9 @@ class Cuisine extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'vendor' => new UserResource($this->owner),
+            'is_delivering_now' => $this->is_delivering_now,
+            'image' => $this->getMedia('main_image')->first()->getUrl(),
         ];
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CuisineController;
+use App\Http\Controllers\Api\RestaurantController;
 
 Route::group(['prefix' => 'auth'], function(){
 	Route::post('login', [AuthController::class, 'login']);
@@ -14,3 +15,4 @@ Route::group(['prefix' => 'auth'], function(){
 });
 
 Route::resource('cuisine', CuisineController::class);
+Route::resource('restaurant', RestaurantController::class);

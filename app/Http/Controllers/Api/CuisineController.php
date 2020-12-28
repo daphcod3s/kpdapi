@@ -6,6 +6,7 @@ use App\Models\Cuisine;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Cuisine\Cuisine as CuisineResource;
+use App\Http\Resources\Cuisine\CuisineCollection;
 
 class CuisineController extends Controller
 {
@@ -25,7 +26,7 @@ class CuisineController extends Controller
      */
     public function index(Request $request)
     {
-        return new CuisineResource(Cuisine::with('createdBy')->active()->get());
+        return new CuisineCollection(Cuisine::with('createdBy')->active()->get());
     }
 
     /**

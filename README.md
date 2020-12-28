@@ -7,4 +7,5 @@
 	6. $users->factory(20)->create();
 	7. $cuisines = new \App\Models\Cuisine();
 	8. $cuisines->factory(30)->create();
-	9. exit
+	9. php artisan storage:link
+	10. exit
