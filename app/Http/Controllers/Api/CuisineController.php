@@ -25,7 +25,7 @@ class CuisineController extends Controller
      */
     public function index(Request $request)
     {
-        return new CuisineResource(Cuisine::active()->get());
+        return new CuisineResource(Cuisine::with('createdBy')->active()->get());
     }
 
     /**

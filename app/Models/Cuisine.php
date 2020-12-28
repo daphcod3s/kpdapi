@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Cuisine extends Model
 {
@@ -17,5 +18,9 @@ class Cuisine extends Model
 
     public function scopeActive($query){
     	return $query->where('is_active', true);
+    }
+
+    public function createdBy(){
+    	return $this->belongsTo(User::class, 'created_by', 'id');
     }
 }
