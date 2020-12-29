@@ -13,8 +13,6 @@ class CuisineController extends Controller
 
     public function __construct(){
         $this->middleware('auth:api', ['except' => ['index', 'show']]);
-        $this->middleware('permission:list-cuisine', ['only' => ['index']]);
-        $this->middleware('permission:show-cuisine', ['only' => ['show']]);
         $this->middleware('permission:add-cuisine', ['only' => ['store']]);
         $this->middleware('permission:update-cuisine', ['only' => ['update']]);
         $this->middleware('permission:delete-cuisine', ['only' => ['destroy']]);
