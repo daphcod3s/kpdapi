@@ -8,6 +8,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\User;
+use App\Models\Cuisine;
 
 class Restaurant extends Model implements HasMedia
 {
@@ -30,5 +31,9 @@ class Restaurant extends Model implements HasMedia
 
     public function owner(){
     	return $this->belongsTo(User::class, 'vendor', 'id');
+    }
+
+    public function cuisines(){
+        return $this->belongsToMany(Cuisine::class, 'restaurant_cuisines', 'restaurant_id', 'cuisine_id');
     }
 }

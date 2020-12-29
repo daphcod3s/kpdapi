@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Restaurant;
 
 class Cuisine extends Model
 {
@@ -22,5 +23,9 @@ class Cuisine extends Model
 
     public function createdBy(){
     	return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function restaurants(){
+        return $this->belongsToMany(Cuisine::class, 'restaurant_cuisines', 'cuisine_id', 'restaurant_id');
     }
 }

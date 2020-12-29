@@ -7,6 +7,8 @@ use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use App\Http\Resources\Restaurant\Restaurant as RestaurantResource;
 use App\Http\Resources\Restaurant\RestaurantCollection;
+use DB;
+use File;
 
 class RestaurantController extends Controller
 {
@@ -34,17 +36,38 @@ class RestaurantController extends Controller
      */
     public function store(Request $request)
     {
-        $restaurant = Restaurant::create([
-            'name' => $request->name,
-            'vendor' => $request->vendor,
-            'phone' => $request->phone
-        ]);
+        try{
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'vendor' => 'required|integer',
+                'phone' => 'required',
+                'image' => 'required|image',
+                'cuisine' => 'required'
+            ]);
 
-        if($restaurant){
-            $restaurant->addMediaFromRequest('image')->toMediaCollection('main_image');
+            DB::beginTransaction();
+
+            $restaurant = Restaurant::create([
+                'name' => $request->name,
+                'vendor' => $request->vendor,
+                'phone' => $request->phone
+            ]);
+
+            if($request->has('image')){
+                $restaurant->addMediaFromRequest('image')->toMediaCollection('main_image');
+            }
+
+            $restaurant->cuisines()->attach($request->cuisine);
+
+            DB::commit();
+
+            return new RestaurantResource($restaurant);
+        }catch(Exception $e){
+            DB::rollback();
+            return response()->json([
+                "message" => $e->getMessage()
+            ], $e->getCode());
         }
-
-        return new RestaurantResource($restaurant);
     }
 
     /**
@@ -67,7 +90,39 @@ class RestaurantController extends Controller
      */
     public function update(Request $request, Restaurant $restaurant)
     {
-        //
+        try{
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'vendor' => 'required|integer',
+                'phone' => 'required',
+                'image' => 'required|image',
+                'cuisine' => 'required'
+            ]);
+
+            DB::beginTransaction();
+
+            $restaurant->fill($request->only('name', 'vendor', 'phone'))->update();
+
+            if($request->hasFile('image')){
+                // $image = $restaurant->getMedia('main_image')->first()->getPath();
+                // if(File::exists($image)){
+                //     File::delete($image);
+                // }
+                $restaurant->clearMediaCollection('main_image');
+                $restaurant->addMediaFromRequest('image')->toMediaCollection('main_image');
+            }
+
+            $restaurant->cuisines()->sync($request->cuisine);
+
+            DB::commit();
+
+            return new RestaurantResource($restaurant);
+        }catch(Exception $e){
+            DB::rollback();
+            return response()->json([
+                "message" => $e->getMessage()
+            ], $e->getCode());
+        }   
     }
 
     /**
@@ -78,6 +133,10 @@ class RestaurantController extends Controller
      */
     public function destroy(Restaurant $restaurant)
     {
-        //
+        $restaurant->clearMediaCollection();
+        $restaurant->delete();
+        return response()->json([
+            "message" => "Restaurant Deleted"
+        ], 202);
     }
 }
