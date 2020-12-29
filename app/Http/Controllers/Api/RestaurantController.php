@@ -12,6 +12,9 @@ class RestaurantController extends Controller
 {
     public function __construct(){
         $this->middleware('auth:api', ['except' => ['index', 'show']]);
+        $this->middleware('permission:add-restaurant', ['only' => ['store']]);
+        $this->middleware('permission:update-restaurant', ['only' => ['update']]);
+        $this->middleware('permission:delete-restaurant', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
